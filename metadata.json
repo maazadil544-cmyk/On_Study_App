@@ -1,0 +1,6 @@
+{
+  "name": "ON Study",
+  "description": "Pakistan Academic Guides & Textbooks (Class 1-12) for KPK, Punjab, Balochistan & Sindh with in-app PDF reader, bookmarks, notes, and admin management",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
