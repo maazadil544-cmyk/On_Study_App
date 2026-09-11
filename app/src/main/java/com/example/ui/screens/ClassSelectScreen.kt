@@ -29,6 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.adsterra.AdsterraBannerAd
 import com.example.data.model.Province
 import com.example.ui.components.AppTopBar
 import com.example.ui.theme.*
@@ -63,6 +64,22 @@ fun ClassSelectScreen(viewModel: StudyViewModel) {
                 onBackClick = { viewModel.navigateBack() },
                 viewModel = viewModel
             )
+        },
+        bottomBar = {
+            Surface(
+                color = Color.White,
+                border = androidx.compose.foundation.BorderStroke(1.dp, Slate200),
+                shadowElevation = 8.dp,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .navigationBarsPadding()
+                ) {
+                    AdsterraBannerAd()
+                }
+            }
         }
     ) { innerPadding ->
         LazyColumn(

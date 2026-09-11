@@ -28,6 +28,7 @@ import androidx.compose.ui.platform.LocalContext
 import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.adsterra.AdsterraBannerAd
 import com.example.data.local.BookEntity
 import com.example.data.model.BookType
 import com.example.ui.components.AppTopBar
@@ -57,6 +58,22 @@ fun BookListScreen(viewModel: StudyViewModel) {
                 onBackClick = { viewModel.navigateBack() },
                 viewModel = viewModel
             )
+        },
+        bottomBar = {
+            Surface(
+                color = Color.White,
+                border = androidx.compose.foundation.BorderStroke(1.dp, Slate200),
+                shadowElevation = 8.dp,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .navigationBarsPadding()
+                ) {
+                    AdsterraBannerAd()
+                }
+            }
         }
     ) { innerPadding ->
         Column(

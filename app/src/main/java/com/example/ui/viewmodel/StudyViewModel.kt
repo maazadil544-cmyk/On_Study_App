@@ -17,6 +17,7 @@ enum class Screen {
     HOME,             // Province Selection
     CLASS_SELECT,     // Class 1 to 12
     BOOK_LIST,        // Books & Guides for Province + Class
+    GENERAL_BOOKS,    // General Books Hub (Grammar, Health Care, Science, GK, etc.)
     READER,           // In-App PDF / Study Reader
     BOOKMARKS,        // Bookmarks Hub
     NOTES,            // Notes Hub
@@ -137,6 +138,14 @@ class StudyViewModel(application: Application) : AndroidViewModel(application) {
     val unreadNewsCount: StateFlow<Int> = repository.getUnreadNewsCount()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0)
 
+    val generalBooks: StateFlow<List<BookEntity>> = allBooks.map { list ->
+        list.filter { it.provinceCode.equals("general", ignoreCase = true) || it.classLevel == 0 }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    val generalSubjects: StateFlow<List<String>> = generalBooks.map { list ->
+        listOf("All") + list.map { it.subject }.distinct().sorted()
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), listOf("All"))
+
     private data class FilterCriteria(
         val province: Province,
         val classLevel: Int,
@@ -201,6 +210,13 @@ class StudyViewModel(application: Application) : AndroidViewModel(application) {
     fun selectProvince(province: Province) {
         selectedProvince.value = province
         navigateTo(Screen.CLASS_SELECT)
+    }
+
+    fun openGeneralBooks(subject: String? = null) {
+        selectedSubjectFilter.value = subject ?: "All"
+        searchQuery.value = ""
+        com.example.adsterra.AdsterraManager.triggerPopunder(getApplication())
+        navigateTo(Screen.GENERAL_BOOKS)
     }
 
     fun selectClass(classLevel: Int) {

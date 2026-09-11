@@ -1,13 +1,13 @@
 package com.example.ui.screens
 
 import androidx.compose.animation.core.*
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -19,11 +19,14 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.R
 import com.example.data.model.Province
 import com.example.ui.theme.*
 import com.example.ui.viewmodel.Screen
@@ -72,21 +75,21 @@ fun SplashScreen(viewModel: StudyViewModel) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            // Icon glowing box
+            // Official Logo Display with Premium Framing & Glow
             Box(
                 modifier = Modifier
-                    .size(112.dp)
+                    .size(136.dp)
                     .scale(scale.value)
-                    .shadow(16.dp, RoundedCornerShape(28.dp), spotColor = Emerald400)
-                    .clip(RoundedCornerShape(28.dp))
-                    .background(Color.White)
-                    .padding(20.dp),
+                    .shadow(24.dp, RoundedCornerShape(28.dp), spotColor = Emerald300)
+                    .background(Color.White.copy(alpha = 0.15f), RoundedCornerShape(28.dp))
+                    .padding(3.dp)
+                    .clip(RoundedCornerShape(26.dp)),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    imageVector = Icons.Default.MenuBook,
-                    contentDescription = "ON Study App Icon",
-                    tint = Emerald600,
+                Image(
+                    painter = painterResource(id = R.drawable.app_logo),
+                    contentDescription = "ON Study App Logo",
+                    contentScale = ContentScale.Fit,
                     modifier = Modifier.fillMaxSize()
                 )
             }

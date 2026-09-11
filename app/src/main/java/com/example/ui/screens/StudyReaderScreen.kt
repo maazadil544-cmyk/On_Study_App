@@ -19,6 +19,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
+import com.example.adsterra.AdsterraBannerAd
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -493,6 +494,8 @@ fun StudyReaderScreen(viewModel: StudyViewModel) {
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp, vertical = 8.dp)
                     ) {
+                        AdsterraBannerAd(modifier = Modifier.padding(bottom = 6.dp))
+
                         if (displayMode == ReaderDisplayMode.GOOGLE_DRIVE_ONLINE) {
                             // Online Drive Controls
                             Row(

@@ -3,6 +3,7 @@ package com.example.ui.screens
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -25,8 +26,10 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -35,6 +38,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.R
 import com.example.ui.theme.*
 import com.example.ui.viewmodel.StudyViewModel
 
@@ -114,20 +118,20 @@ fun LoginScreen(viewModel: StudyViewModel) {
         ) {
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Brand Header with Glowing Emblem
+            // Brand Header with Official Logo
             Box(
                 modifier = Modifier
-                    .size(80.dp)
-                    .shadow(16.dp, RoundedCornerShape(24.dp), spotColor = Emerald400)
-                    .clip(RoundedCornerShape(24.dp))
-                    .background(Color.White)
-                    .padding(16.dp),
+                    .size(96.dp)
+                    .shadow(16.dp, RoundedCornerShape(22.dp), spotColor = Emerald300)
+                    .background(Color.White.copy(alpha = 0.15f), RoundedCornerShape(22.dp))
+                    .padding(2.dp)
+                    .clip(RoundedCornerShape(20.dp)),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    imageVector = Icons.Default.MenuBook,
+                Image(
+                    painter = painterResource(id = R.drawable.app_logo),
                     contentDescription = "ON Study Logo",
-                    tint = Emerald600,
+                    contentScale = ContentScale.Fit,
                     modifier = Modifier.fillMaxSize()
                 )
             }

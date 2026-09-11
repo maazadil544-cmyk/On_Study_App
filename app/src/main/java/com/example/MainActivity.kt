@@ -31,6 +31,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         setContent {
             MyApplicationTheme {
                 StudyApp(viewModel = viewModel, onFinish = { finish() })
@@ -94,6 +95,7 @@ fun StudyApp(viewModel: StudyViewModel, onFinish: () -> Unit) {
                     Screen.HOME -> HomeScreen(viewModel = viewModel)
                     Screen.CLASS_SELECT -> ClassSelectScreen(viewModel = viewModel)
                     Screen.BOOK_LIST -> BookListScreen(viewModel = viewModel)
+                    Screen.GENERAL_BOOKS -> GeneralBooksScreen(viewModel = viewModel)
                     Screen.READER -> StudyReaderScreen(viewModel = viewModel)
                     Screen.BOOKMARKS -> BookmarksScreen(viewModel = viewModel)
                     Screen.NOTES -> NotesScreen(viewModel = viewModel)

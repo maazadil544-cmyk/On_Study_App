@@ -62,6 +62,18 @@ enum class Province(
         borderColor = ProvinceSindhPurpleBorder,
         textColor = ProvinceSindhPurpleText,
         description = "Karachi, Hyderabad, Sukkur, Larkana, Mirpurkhas Boards"
+    ),
+    GENERAL(
+        code = "general",
+        monogram = "GB",
+        title = "General Books",
+        urduName = "عام کتب",
+        boardName = "Grammar, Health & Reference Library",
+        primaryColor = Color(0xFF0D9488),
+        containerColor = Color(0xFFF0FDFA),
+        borderColor = Color(0xFF99F6E4),
+        textColor = Color(0xFF115E59),
+        description = "English Grammar, Health Care & First Aid, GK, Science & Computer"
     );
 
     companion object {

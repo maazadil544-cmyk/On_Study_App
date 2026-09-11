@@ -1,5 +1,6 @@
 package com.example.ui.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,11 +17,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.R
 import com.example.ui.components.AppTopBar
 import com.example.ui.theme.*
 import com.example.ui.viewmodel.Screen
@@ -38,6 +43,8 @@ fun SettingsScreen(viewModel: StudyViewModel) {
     var showClearConfirmDialog by remember { mutableStateOf(false) }
     var showFeedbackDialog by remember { mutableStateOf(false) }
     var notificationsEnabled by remember { mutableStateOf(true) }
+
+    val context = LocalContext.current
 
     Scaffold(
         containerColor = Slate50,
@@ -456,11 +463,20 @@ fun SettingsScreen(viewModel: StudyViewModel) {
                             modifier = Modifier.fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Icon(Icons.Outlined.Info, contentDescription = null, tint = Emerald600)
-                            Spacer(modifier = Modifier.width(12.dp))
+                            Image(
+                                painter = painterResource(id = R.drawable.app_logo),
+                                contentDescription = "ON Study Logo",
+                                contentScale = ContentScale.Fit,
+                                modifier = Modifier
+                                    .size(48.dp)
+                                    .shadow(4.dp, RoundedCornerShape(12.dp), spotColor = Emerald300)
+                                    .clip(RoundedCornerShape(12.dp))
+                            )
+                            Spacer(modifier = Modifier.width(14.dp))
                             Column(modifier = Modifier.weight(1f)) {
                                 Text("ON Study App", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold, color = Slate900))
-                                Text("Version 1.0.0 (Geometric Edition)", style = MaterialTheme.typography.bodySmall.copy(color = Slate500, fontSize = 11.sp))
+                                Text("Pakistan Academic Guides & Textbooks (All Boards)", style = MaterialTheme.typography.bodySmall.copy(color = Emerald700, fontSize = 11.sp, fontWeight = FontWeight.Medium))
+                                Text("Version 1.0.0", style = MaterialTheme.typography.bodySmall.copy(color = Slate400, fontSize = 10.sp))
                             }
                         }
 

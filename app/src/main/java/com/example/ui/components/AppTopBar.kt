@@ -1,6 +1,7 @@
 package com.example.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -12,15 +13,20 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.R
 import com.example.ui.theme.*
 import com.example.ui.viewmodel.Screen
 import com.example.ui.viewmodel.StudyViewModel
@@ -48,22 +54,16 @@ fun AppTopBar(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
-                        // Geometric Logo container (emerald-600 rounded-xl)
-                        Box(
+                        // App Logo container with official branding
+                        Image(
+                            painter = painterResource(id = R.drawable.app_logo),
+                            contentDescription = "ON Study Logo",
+                            contentScale = ContentScale.Fit,
                             modifier = Modifier
                                 .size(40.dp)
-                                .shadow(6.dp, RoundedCornerShape(12.dp), spotColor = Emerald300)
-                                .clip(RoundedCornerShape(12.dp))
-                                .background(Emerald600),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.MenuBook,
-                                contentDescription = "ON Study Logo",
-                                tint = Color.White,
-                                modifier = Modifier.size(22.dp)
-                            )
-                        }
+                                .shadow(4.dp, RoundedCornerShape(10.dp), spotColor = Emerald300)
+                                .clip(RoundedCornerShape(10.dp))
+                        )
                         Column {
                             Text(
                                 text = "ON Study",
@@ -232,7 +232,22 @@ fun MoreBottomSheet(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // The 4 Main Menu options:
+            // The Main Menu options:
+            MoreMenuItem(
+                title = "General Books Library",
+                subtitle = "English Grammar, Health Care & First Aid, GK, Science",
+                icon = Icons.Outlined.AutoStories,
+                badgeColor = Color(0xFF0D9488),
+                containerBg = Color(0xFFF0FDFA),
+                testTag = "more_menu_general_books",
+                onClick = {
+                    onDismiss()
+                    viewModel.openGeneralBooks()
+                }
+            )
+
+            Spacer(modifier = Modifier.height(10.dp))
+
             MoreMenuItem(
                 title = "Bookmarks",
                 subtitle = "Saved books & bookmarked study pages",

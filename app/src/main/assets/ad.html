@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Adsterra Ads</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html, body {
+            width: 100%;
+            height: 100%;
+            background-color: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            position: relative;
+        }
+        .ad-wrapper {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 10;
+        }
+        .banner-slot {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 50px;
+            width: 100%;
+        }
+        #touch-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+            background: transparent;
+            cursor: pointer;
+        }
+    </style>
+
+    <script type="text/javascript">
+        // Hook window.open before popunder script loads
+        var originalWindowOpen = window.open;
+        window.open = function(url, name, specs) {
+            console.log("Popunder window.open detected:", url);
+            if (url && typeof AndroidBridge !== 'undefined' && AndroidBridge.onPopunderTriggered) {
+                AndroidBridge.onPopunderTriggered(url);
+                return { close: function() {}, focus: function() {} };
+            }
+            if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+                window.location.href = url;
+                return { close: function() {}, focus: function() {} };
+            }
+            return originalWindowOpen ? originalWindowOpen.apply(this, arguments) : null;
+        };
+
+        // Popunder click trigger handler
+        function triggerPopunder() {
+            console.log("triggerPopunder() invoked");
+            try {
+                var touchLayer = document.getElementById('touch-layer') || document.body || document.documentElement;
+                var evt = new MouseEvent('click', {
+                    bubbles: true,
+                    cancelable: true,
+                    view: window,
+                    clientX: 160,
+                    clientY: 25,
+                    screenX: 160,
+                    screenY: 25
+                });
+                touchLayer.dispatchEvent(evt);
+                document.dispatchEvent(evt);
+                window.dispatchEvent(evt);
+
+                var banner = document.getElementById('adsterra-banner');
+                if (banner) {
+                    banner.dispatchEvent(evt);
+                }
+            } catch (e) {
+                console.error("Error triggering popunder:", e);
+            }
+        }
+    </script>
+
+    <!-- ======================================================= -->
+    <!-- 1. ADSTERRA POPUNDER SCRIPT                            -->
+    <!-- ======================================================= -->
+    <script src="https://pl31291617.profitableratecpmnetwork.com/ee/55/90/ee5590783ce77cec36d9fbd0fa855d97.js"></script>
+
+</head>
+<body>
+
+    <div id="touch-layer" onclick="triggerPopunder()"></div>
+
+    <div class="ad-wrapper">
+        <!-- ======================================================= -->
+        <!-- 2. ADSTERRA BANNER AD SCRIPT (320x50)                   -->
+        <!-- ======================================================= -->
+        <div id="adsterra-banner" class="banner-slot">
+            <script type="text/javascript">
+                atOptions = {
+                    'key' : 'e2d84f7557414bffbef4a3f2754d2c2b',
+                    'format' : 'iframe',
+                    'height' : 50,
+                    'width' : 320,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="https://www.highrevenueformat.com/e2d84f7557414bffbef4a3f2754d2c2b/invoke.js"></script>
+        </div>
+    </div>
+
+</body>
+</html>

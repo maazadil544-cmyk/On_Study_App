@@ -26,6 +26,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.ui.platform.LocalContext
 import com.example.data.local.BookEntity
 import com.example.data.local.NewsEntity
 import com.example.data.model.BookType
@@ -43,7 +44,7 @@ fun AdminPanelScreen(viewModel: StudyViewModel) {
     val allBooks by viewModel.allBooks.collectAsStateWithLifecycle()
     val allNews by viewModel.allNews.collectAsStateWithLifecycle()
 
-    var selectedAdminTab by remember { mutableStateOf(0) } // 0: Books Catalog, 1: Add New Book, 2: Announcements, 3: Analytics
+    var selectedAdminTab by remember { mutableStateOf(0) } // 0: Books Catalog, 1: Add New Book, 2: Announcements, 3: Analytics, 4: Firebase Sync
     var searchQuery by remember { mutableStateOf("") }
     var bookToEdit by remember { mutableStateOf<BookEntity?>(null) }
     var bookToDelete by remember { mutableStateOf<BookEntity?>(null) }
@@ -90,10 +91,11 @@ fun AdminPanelScreen(viewModel: StudyViewModel) {
                     .padding(innerPadding)
             ) {
                 // Admin Navigation Tabs
-                TabRow(
+                ScrollableTabRow(
                     selectedTabIndex = selectedAdminTab,
                     containerColor = Color.White,
                     contentColor = Emerald600,
+                    edgePadding = 12.dp,
                     indicator = { tabPositions ->
                         TabRowDefaults.SecondaryIndicator(
                             modifier = Modifier.tabIndicatorOffset(tabPositions[selectedAdminTab]),
@@ -1837,4 +1839,5 @@ fun AdminFirebaseSyncTab(viewModel: StudyViewModel) {
         )
     }
 }
+
 

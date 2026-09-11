@@ -38,6 +38,14 @@ class StudyRepository(
         if (booksCount == 0) {
             val defaultBooks = SampleDataProvider.getInitialBooks()
             dao.insertBooks(defaultBooks)
+        } else {
+            // Check if general books exist, if not seed them
+            val allBooks = dao.getAllBooksSync()
+            val hasGeneralBooks = allBooks.any { it.provinceCode.equals("general", ignoreCase = true) }
+            if (!hasGeneralBooks) {
+                val generalBooks = SampleDataProvider.getGeneralBooks()
+                dao.insertBooks(generalBooks)
+            }
         }
         val currentNews = dao.getAllNewsSync()
         if (currentNews.isEmpty()) {
