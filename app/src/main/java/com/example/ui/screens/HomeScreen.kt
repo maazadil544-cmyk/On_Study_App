@@ -36,8 +36,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.adsterra.AdsterraBannerAd
 import com.example.adsterra.AdsterraManager
 import com.example.data.local.BookEntity
+import com.example.data.model.BookType
 import com.example.data.model.Province
 import com.example.ui.components.AppTopBar
+import com.example.ui.components.BookCoverImage
 import com.example.ui.theme.*
 import com.example.ui.viewmodel.Screen
 import com.example.ui.viewmodel.StudyViewModel
@@ -903,20 +905,18 @@ fun QuickBookItemCard(
             modifier = Modifier.padding(14.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
+            // Book Cover (Auto-Extracted PDF First Page)
+            BookCoverImage(
+                coverImage = book.coverImage,
+                title = book.title,
+                subject = book.subject,
+                bookType = BookType.fromString(book.bookType),
                 modifier = Modifier
-                    .size(46.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(Emerald50),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Book,
-                    contentDescription = null,
-                    tint = Emerald600,
-                    modifier = Modifier.size(22.dp)
-                )
-            }
+                    .width(42.dp)
+                    .height(58.dp),
+                cornerRadius = 10.dp,
+                elevation = 2.dp
+            )
             Spacer(modifier = Modifier.width(14.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
@@ -1121,26 +1121,24 @@ fun FeaturedGeneralBookCard(
                 .fillMaxWidth()
                 .padding(14.dp)
         ) {
-            // Header with Icon and Subject Badge
+            // Header with Cover and Subject Badge
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.Top
             ) {
-                Box(
+                // Book Cover (Auto-Extracted PDF First Page)
+                BookCoverImage(
+                    coverImage = book.coverImage,
+                    title = book.title,
+                    subject = book.subject,
+                    bookType = BookType.fromString(book.bookType),
                     modifier = Modifier
-                        .size(38.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(containerBg),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = icon,
-                        contentDescription = null,
-                        tint = themeColor,
-                        modifier = Modifier.size(20.dp)
-                    )
-                }
+                        .width(44.dp)
+                        .height(60.dp),
+                    cornerRadius = 8.dp,
+                    elevation = 2.dp
+                )
 
                 Surface(
                     color = containerBg,

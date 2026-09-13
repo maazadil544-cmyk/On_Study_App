@@ -32,6 +32,7 @@ import com.example.adsterra.AdsterraBannerAd
 import com.example.data.local.BookEntity
 import com.example.data.model.BookType
 import com.example.ui.components.AppTopBar
+import com.example.ui.components.BookCoverImage
 import com.example.ui.theme.*
 import com.example.ui.viewmodel.StudyViewModel
 
@@ -345,47 +346,18 @@ fun BookCardItem(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.Top
             ) {
-                // Book Cover / Subject Icon Box
-                Box(
+                // Book Cover (Auto-Extracted PDF First Page)
+                BookCoverImage(
+                    coverImage = book.coverImage,
+                    title = book.title,
+                    subject = book.subject,
+                    bookType = bookType,
                     modifier = Modifier
-                        .width(60.dp)
-                        .height(76.dp)
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(bookType.badgeColor.copy(alpha = 0.12f)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Icon(
-                            imageVector = when (book.subject.lowercase()) {
-                                "mathematics", "maths" -> Icons.Default.Calculate
-                                "physics" -> Icons.Default.Bolt
-                                "chemistry" -> Icons.Default.Science
-                                "biology" -> Icons.Default.Spa
-                                "computer science", "computer" -> Icons.Default.Computer
-                                "english" -> Icons.Default.Translate
-                                "urdu" -> Icons.Default.MenuBook
-                                "sindhi" -> Icons.Default.MenuBook
-                                "pakistan studies" -> Icons.Default.Public
-                                else -> Icons.Default.AutoStories
-                            },
-                            contentDescription = book.subject,
-                            tint = bookType.badgeColor,
-                            modifier = Modifier.size(28.dp)
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(
-                            text = book.subject.take(6),
-                            style = MaterialTheme.typography.labelSmall.copy(
-                                fontSize = 9.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = bookType.badgeColor
-                            )
-                        )
-                    }
-                }
+                        .width(62.dp)
+                        .height(84.dp),
+                    cornerRadius = 14.dp,
+                    elevation = 2.dp
+                )
 
                 Spacer(modifier = Modifier.width(14.dp))
 
@@ -630,7 +602,30 @@ fun BookDetailsDialog(
             Text(text = book.title, fontWeight = FontWeight.Bold, color = Slate900)
         },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                // Book Cover
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    BookCoverImage(
+                        coverImage = book.coverImage,
+                        title = book.title,
+                        subject = book.subject,
+                        bookType = BookType.fromString(book.bookType),
+                        modifier = Modifier
+                            .width(100.dp)
+                            .height(140.dp),
+                        cornerRadius = 14.dp,
+                        elevation = 4.dp
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(4.dp))
+
                 Text(
                     text = "Subject: ${book.subject} • Class ${book.classLevel}",
                     style = MaterialTheme.typography.bodyMedium,

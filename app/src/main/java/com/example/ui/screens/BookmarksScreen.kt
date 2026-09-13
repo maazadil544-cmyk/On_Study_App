@@ -24,7 +24,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.data.local.BookmarkEntity
+import com.example.data.model.BookType
 import com.example.ui.components.AppTopBar
+import com.example.ui.components.BookCoverImage
 import com.example.ui.theme.*
 import com.example.ui.viewmodel.Screen
 import com.example.ui.viewmodel.StudyViewModel
@@ -127,19 +129,33 @@ fun BookmarksScreen(viewModel: StudyViewModel) {
                             modifier = Modifier.padding(16.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Box(
-                                modifier = Modifier
-                                    .size(46.dp)
-                                    .clip(RoundedCornerShape(12.dp))
-                                    .background(Color(0xFFFEF9C3)),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Bookmark,
-                                    contentDescription = null,
-                                    tint = Color(0xFFCA8A04),
-                                    modifier = Modifier.size(24.dp)
+                            if (matchedBook != null) {
+                                BookCoverImage(
+                                    coverImage = matchedBook.coverImage,
+                                    title = matchedBook.title,
+                                    subject = matchedBook.subject,
+                                    bookType = BookType.fromString(matchedBook.bookType),
+                                    modifier = Modifier
+                                        .width(42.dp)
+                                        .height(58.dp),
+                                    cornerRadius = 8.dp,
+                                    elevation = 2.dp
                                 )
+                            } else {
+                                Box(
+                                    modifier = Modifier
+                                        .size(46.dp)
+                                        .clip(RoundedCornerShape(12.dp))
+                                        .background(Color(0xFFFEF9C3)),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Bookmark,
+                                        contentDescription = null,
+                                        tint = Color(0xFFCA8A04),
+                                        modifier = Modifier.size(24.dp)
+                                    )
+                                }
                             }
 
                             Spacer(modifier = Modifier.width(14.dp))

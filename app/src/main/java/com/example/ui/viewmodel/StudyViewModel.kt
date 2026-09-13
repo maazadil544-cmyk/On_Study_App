@@ -486,8 +486,25 @@ class StudyViewModel(application: Application) : AndroidViewModel(application) {
     fun addNewBookFromAdmin(book: BookEntity) {
         viewModelScope.launch {
             repository.addNewBook(book)
-            uiMessage.emit(UiMessage("Book '${book.title}' saved & synced to Firebase Realtime Database!"))
+            uiMessage.emit(UiMessage("Book '${book.title}' saved with cover & synced to Firebase!"))
         }
+    }
+
+    suspend fun extractCoverFromPdf(
+        pdfUrl: String,
+        title: String = "",
+        subject: String = "",
+        classLevel: Int = 10,
+        provinceCode: String = "punjab"
+    ): String {
+        return com.example.data.util.PdfCoverExtractor.extractCoverFromPdf(
+            context = getApplication(),
+            rawUrl = pdfUrl,
+            fallbackTitle = title,
+            fallbackSubject = subject,
+            fallbackClass = classLevel,
+            fallbackProvince = provinceCode
+        )
     }
 
     fun updateBookFromAdmin(book: BookEntity) {

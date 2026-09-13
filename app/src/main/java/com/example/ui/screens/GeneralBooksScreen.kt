@@ -33,7 +33,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.adsterra.AdsterraBannerAd
 import com.example.adsterra.AdsterraManager
 import com.example.data.local.BookEntity
+import com.example.data.model.BookType
 import com.example.ui.components.AppTopBar
+import com.example.ui.components.BookCoverImage
 import com.example.ui.theme.*
 import com.example.ui.viewmodel.Screen
 import com.example.ui.viewmodel.StudyViewModel
@@ -345,20 +347,18 @@ fun GeneralBookCard(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.Top
             ) {
-                Box(
+                // Book Cover (Auto-Extracted PDF First Page)
+                BookCoverImage(
+                    coverImage = book.coverImage,
+                    title = book.title,
+                    subject = book.subject,
+                    bookType = BookType.fromString(book.bookType),
                     modifier = Modifier
-                        .size(50.dp)
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(containerBg),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = icon,
-                        contentDescription = null,
-                        tint = themeColor,
-                        modifier = Modifier.size(26.dp)
-                    )
-                }
+                        .width(58.dp)
+                        .height(80.dp),
+                    cornerRadius = 12.dp,
+                    elevation = 2.dp
+                )
 
                 Spacer(modifier = Modifier.width(14.dp))
 
@@ -561,6 +561,26 @@ fun GeneralBookDetailDialog(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
+                // Book Cover
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    BookCoverImage(
+                        coverImage = book.coverImage,
+                        title = book.title,
+                        subject = book.subject,
+                        bookType = BookType.fromString(book.bookType),
+                        modifier = Modifier
+                            .width(100.dp)
+                            .height(140.dp),
+                        cornerRadius = 14.dp,
+                        elevation = 4.dp
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(2.dp))
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween

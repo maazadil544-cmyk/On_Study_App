@@ -171,17 +171,49 @@ class StudyRepository(
     fun getBookmarkedBooks(): Flow<List<BookEntity>> = dao.getBookmarkedBooks()
 
     suspend fun addNewBook(book: BookEntity): Long = withContext(Dispatchers.IO) {
-        val insertedId = dao.insertBook(book)
-        val finalBook = book.copy(id = insertedId)
+        var bookToInsert = book
+        if (bookToInsert.coverImage.isBlank() && bookToInsert.fileLink.isNotBlank()) {
+            try {
+                val cover = com.example.data.util.PdfCoverExtractor.extractCoverFromPdf(
+                    context = context,
+                    rawUrl = bookToInsert.fileLink,
+                    fallbackTitle = bookToInsert.title,
+                    fallbackSubject = bookToInsert.subject,
+                    fallbackClass = bookToInsert.classLevel,
+                    fallbackProvince = bookToInsert.provinceCode
+                )
+                bookToInsert = bookToInsert.copy(coverImage = cover)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        val insertedId = dao.insertBook(bookToInsert)
+        val finalBook = bookToInsert.copy(id = insertedId)
         // Upload immediately to Firebase Realtime Database for all devices
         firebaseManager.uploadBook(finalBook)
         insertedId
     }
 
     suspend fun updateBook(book: BookEntity) = withContext(Dispatchers.IO) {
-        dao.updateBook(book)
+        var bookToUpdate = book
+        if (bookToUpdate.coverImage.isBlank() && bookToUpdate.fileLink.isNotBlank()) {
+            try {
+                val cover = com.example.data.util.PdfCoverExtractor.extractCoverFromPdf(
+                    context = context,
+                    rawUrl = bookToUpdate.fileLink,
+                    fallbackTitle = bookToUpdate.title,
+                    fallbackSubject = bookToUpdate.subject,
+                    fallbackClass = bookToUpdate.classLevel,
+                    fallbackProvince = bookToUpdate.provinceCode
+                )
+                bookToUpdate = bookToUpdate.copy(coverImage = cover)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        dao.updateBook(bookToUpdate)
         // Push update to Firebase Realtime Database
-        firebaseManager.uploadBook(book)
+        firebaseManager.uploadBook(bookToUpdate)
     }
 
     suspend fun deleteBook(book: BookEntity) = withContext(Dispatchers.IO) {
@@ -283,12 +315,20 @@ class StudyRepository(
 
         if (isDownloadedSuccessfully && targetFile.exists() && pdfDownloader.isValidPdfFile(targetFile)) {
             val actualPages = pdfDownloader.getActualPdfPageCount(targetFile, book.totalPages)
+            var coverImg = book.coverImage
+            if (coverImg.isBlank() || !coverImg.startsWith("/")) {
+                val extracted = com.example.data.util.PdfCoverExtractor.renderPdfFirstPageToImage(context, targetFile)
+                if (!extracted.isNullOrBlank()) {
+                    coverImg = extracted
+                }
+            }
             val updatedBook = book.copy(
                 isDownloaded = true,
                 isDownloading = false,
                 downloadProgress = 100,
                 localFilePath = targetFile.absolutePath,
-                totalPages = actualPages
+                totalPages = actualPages,
+                coverImage = coverImg
             )
             dao.updateBook(updatedBook)
             onProgress(100)
@@ -306,12 +346,20 @@ class StudyRepository(
 
             if (generated && targetFile.exists() && pdfDownloader.isValidPdfFile(targetFile)) {
                 val actualPages = pdfDownloader.getActualPdfPageCount(targetFile, book.totalPages)
+                var coverImg = book.coverImage
+                if (coverImg.isBlank() || !coverImg.startsWith("/")) {
+                    val extracted = com.example.data.util.PdfCoverExtractor.renderPdfFirstPageToImage(context, targetFile)
+                    if (!extracted.isNullOrBlank()) {
+                        coverImg = extracted
+                    }
+                }
                 val updatedBook = book.copy(
                     isDownloaded = true,
                     isDownloading = false,
                     downloadProgress = 100,
                     localFilePath = targetFile.absolutePath,
-                    totalPages = actualPages
+                    totalPages = actualPages,
+                    coverImage = coverImg
                 )
                 dao.updateBook(updatedBook)
                 onProgress(100)

@@ -1,0 +1,92 @@
+# Privacy Policy for ON Study
+
+**Last Updated:** September 12, 2026
+
+**Application Name:** ON Study  
+**Package Name:** com.aistudio.onstudy.edu  
+**Contact Email:** maazadil544@gmail.com  
+
+---
+
+## 1. Introduction
+Welcome to **ON Study**. We are committed to protecting your privacy and ensuring that your educational learning experience is safe and secure. This Privacy Policy explains how information is collected, used, and safeguarded when you use our mobile application ("ON Study").
+
+By installing and using ON Study, you agree to the collection and use of information in accordance with this policy.
+
+---
+
+## 2. Information We Collect
+
+### A. Information Stored Locally on Your Device
+ON Study is primarily an educational companion and study tool. The following data is kept strictly **on your local device**:
+- **Downloaded Books & Offline PDF Cache:** Educational materials, past papers, notes, and guide books saved for offline reading.
+- **Bookmarks & Reading Progress:** Saved pages, recent books, and chapter progress.
+- **Personal Study Notes:** Notes or highlights you create within the app.
+- **App Preferences:** Settings such as theme selection, font size, and reader preferences.
+
+We do NOT collect, transmit, or sell your local reading history, notes, or personal files to any third-party servers.
+
+### B. Device and Usage Data (Automated)
+When accessing online features (such as downloading updated textbook catalogs, cloud-hosted PDF documents, or loading announcements), standard technical information may be transmitted to hosting servers:
+- Device model and manufacturer
+- Operating system version (Android OS)
+- Internet connection status and IP address (for routing and network delivery)
+
+---
+
+## 3. Advertising Partners (Third-Party Ad Networks)
+To keep ON Study free and accessible for all students, our application displays advertisements provided by third-party advertising networks (including **Adsterra**).
+
+These third-party ad networks may automatically collect and process certain non-personally identifiable information from your device, including:
+- Advertising ID (Google Advertising ID / GAID)
+- IP address and general geographic location (country/city level)
+- Device type, screen resolution, browser version, and network carrier
+- Ad impression and interaction metrics (clicks, views)
+
+These third-party ad services use cookies, web beacons, and unique identifiers to serve relevant ads and measure advertising campaign performance.
+
+For more information about how our advertising partners handle your data, please visit:
+- **Adsterra Privacy Policy:** [https://adsterra.com/privacy-policy/](https://adsterra.com/privacy-policy/)
+
+You can reset your Advertising ID or opt out of personalized advertisements at any time through your Android device settings:
+*Settings > Google > Ads > Delete advertising ID / Reset advertising ID*.
+
+---
+
+## 4. Permissions Used by the App
+ON Study requests only minimal permissions necessary to provide its core educational functionality:
+- **INTERNET & ACCESS_NETWORK_STATE:** Required to load online textbooks, syllabus updates, announcements, and advertisements.
+- **POST_NOTIFICATIONS:** (Optional / Android 13+) Used strictly to alert you about newly uploaded books, past papers, or curriculum updates.
+
+ON Study does NOT request sensitive permissions such as Camera, Microphone, GPS Location, Contacts, or SMS.
+
+---
+
+## 5. Children's Privacy (COPPA Compliance)
+ON Study provides academic textbooks and study guides designed for students. We do not knowingly collect or solicit any personally identifiable information from children under the age of 13. All educational content is available without requiring account registration, names, phone numbers, or passwords.
+
+If you are a parent or guardian and believe your child has provided us with personal information, please contact us immediately at **maazadil544@gmail.com** so we can remove such information.
+
+---
+
+## 6. Data Security
+We value your trust in providing your information. Because all your notes, bookmarks, and downloads are stored locally on your device in secure sandbox storage, your data remains in your control. While no method of transmission over the internet or electronic storage is 100% secure, we strive to use commercially acceptable means of protecting your connection to educational repositories.
+
+---
+
+## 7. Third-Party Links
+ON Study may contain links to external websites, educational repositories (such as official textbook boards, Google Drive links for textbooks), or advertiser websites. If you click on a third-party link, you will be directed to that site. Note that these external sites are not operated by us, and we strongly encourage you to review their respective privacy policies.
+
+---
+
+## 8. Changes to This Privacy Policy
+We may update our Privacy Policy periodically. You are advised to review this page occasionally for any changes. Any updates will become effective immediately upon posting.
+
+---
+
+## 9. Contact Us
+If you have questions, feedback, or concerns regarding this Privacy Policy or your data within ON Study, please contact us:
+
+- **Developer:** Maaz Adil
+- **Email:** maazadil544@gmail.com
+- **Application:** ON Study (com.aistudio.onstudy.edu)

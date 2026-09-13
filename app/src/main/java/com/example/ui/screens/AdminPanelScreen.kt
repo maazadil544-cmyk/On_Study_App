@@ -32,8 +32,10 @@ import com.example.data.local.NewsEntity
 import com.example.data.model.BookType
 import com.example.data.model.Province
 import com.example.ui.components.AppTopBar
+import com.example.ui.components.BookCoverImage
 import com.example.ui.theme.*
 import com.example.ui.viewmodel.StudyViewModel
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -602,6 +604,20 @@ fun AdminBooksListTab(
                         modifier = Modifier.padding(14.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+                        BookCoverImage(
+                            coverImage = book.coverImage,
+                            title = book.title,
+                            subject = book.subject,
+                            bookType = BookType.fromString(book.bookType),
+                            modifier = Modifier
+                                .width(42.dp)
+                                .height(58.dp),
+                            cornerRadius = 8.dp,
+                            elevation = 2.dp
+                        )
+
+                        Spacer(modifier = Modifier.width(12.dp))
+
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
                                 text = book.title,
@@ -695,7 +711,11 @@ fun AdminAddBookTab(
     var fileLink by remember { mutableStateOf(initialBook?.fileLink ?: "") }
     var fileSize by remember { mutableStateOf(initialBook?.fileSize ?: "18.5 MB") }
     var sampleContent by remember { mutableStateOf(initialBook?.sampleContent ?: "") }
+    var coverImage by remember { mutableStateOf(initialBook?.coverImage ?: "") }
+    var isExtractingCover by remember { mutableStateOf(false) }
     var validationError by remember { mutableStateOf<String?>(null) }
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     val commonSubjects = listOf(
         "Physics", "Mathematics", "Chemistry", "Biology", "Computer Science",
@@ -949,6 +969,121 @@ fun AdminAddBookTab(
             )
         }
 
+        // Cover Photo (Auto-Extracted from PDF First Page)
+        item {
+            Surface(
+                shape = RoundedCornerShape(16.dp),
+                color = Slate50,
+                border = androidx.compose.foundation.BorderStroke(1.dp, Slate200),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(modifier = Modifier.padding(14.dp)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Icon(Icons.Default.Image, contentDescription = null, tint = Emerald600, modifier = Modifier.size(18.dp))
+                            Text(
+                                "Cover Photo (PDF Page 1)",
+                                style = MaterialTheme.typography.titleSmall.copy(
+                                    fontWeight = FontWeight.Bold,
+                                    color = Slate900
+                                )
+                            )
+                        }
+
+                        if (isExtractingCover) {
+                            CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp, color = Emerald600)
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(14.dp)
+                    ) {
+                        BookCoverImage(
+                            coverImage = coverImage,
+                            title = title.ifBlank { "Sample Book" },
+                            subject = subject,
+                            bookType = BookType.fromString(bookType),
+                            modifier = Modifier
+                                .width(64.dp)
+                                .height(88.dp),
+                            cornerRadius = 10.dp,
+                            elevation = 3.dp
+                        )
+
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = if (coverImage.isNotBlank()) "✓ PDF Page 1 Cover Ready" else "Auto-extracts from PDF",
+                                style = MaterialTheme.typography.bodySmall.copy(
+                                    fontWeight = FontWeight.Bold,
+                                    color = if (coverImage.isNotBlank()) Emerald700 else Slate600
+                                )
+                            )
+                            Spacer(modifier = Modifier.height(2.dp))
+                            Text(
+                                text = "Cover will be generated from the first page of the uploaded PDF link.",
+                                style = MaterialTheme.typography.bodySmall.copy(
+                                    color = Slate500,
+                                    fontSize = 11.sp
+                                )
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+
+                            OutlinedButton(
+                                onClick = {
+                                    if (fileLink.isBlank()) {
+                                        validationError = "Please enter the PDF link first to extract Page 1"
+                                        return@OutlinedButton
+                                    }
+                                    isExtractingCover = true
+                                    scope.launch {
+                                        try {
+                                            val extracted = com.example.data.util.PdfCoverExtractor.extractCoverFromPdf(
+                                                context = context,
+                                                rawUrl = fileLink,
+                                                fallbackTitle = title,
+                                                fallbackSubject = subject,
+                                                fallbackClass = selectedClass,
+                                                fallbackProvince = selectedProvince
+                                            )
+                                            coverImage = extracted
+                                        } catch (e: Exception) {
+                                            e.printStackTrace()
+                                        } finally {
+                                            isExtractingCover = false
+                                        }
+                                    }
+                                },
+                                enabled = !isExtractingCover,
+                                shape = RoundedCornerShape(10.dp),
+                                colors = ButtonDefaults.outlinedButtonColors(contentColor = Emerald700),
+                                border = androidx.compose.foundation.BorderStroke(1.dp, Emerald600),
+                                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
+                            ) {
+                                Icon(Icons.Default.AutoAwesome, contentDescription = null, modifier = Modifier.size(14.dp))
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Text(
+                                    text = if (coverImage.isBlank()) "Extract Page 1 Cover" else "Regenerate Cover",
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         // File Size
         item {
             OutlinedTextField(
@@ -1024,20 +1159,55 @@ fun AdminAddBookTab(
                         return@Button
                     }
 
-                    onSave(
-                        BookEntity(
-                            title = title.trim(),
-                            provinceCode = selectedProvince.lowercase().trim(),
-                            classLevel = selectedClass,
-                            subject = subject.trim(),
-                            bookType = bookType,
-                            fileLink = fileLink.trim(),
-                            fileSize = fileSize.ifBlank { "15.0 MB" },
-                            sampleContent = sampleContent.ifBlank {
-                                "[CHAPTER 1: INTRODUCTION]\n$title\nCurriculum content for Class $selectedClass ($subject).\nIncludes complete solved exercises, board questions, and summaries."
+                    if (coverImage.isBlank()) {
+                        isExtractingCover = true
+                        scope.launch {
+                            val extracted = try {
+                                com.example.data.util.PdfCoverExtractor.extractCoverFromPdf(
+                                    context = context,
+                                    rawUrl = fileLink.trim(),
+                                    fallbackTitle = title.trim(),
+                                    fallbackSubject = subject.trim(),
+                                    fallbackClass = selectedClass,
+                                    fallbackProvince = selectedProvince
+                                )
+                            } catch (e: Exception) {
+                                ""
                             }
+                            isExtractingCover = false
+                            onSave(
+                                BookEntity(
+                                    title = title.trim(),
+                                    provinceCode = selectedProvince.lowercase().trim(),
+                                    classLevel = selectedClass,
+                                    subject = subject.trim(),
+                                    bookType = bookType,
+                                    fileLink = fileLink.trim(),
+                                    coverImage = extracted,
+                                    fileSize = fileSize.ifBlank { "15.0 MB" },
+                                    sampleContent = sampleContent.ifBlank {
+                                        "[CHAPTER 1: INTRODUCTION]\n$title\nCurriculum content for Class $selectedClass ($subject).\nIncludes complete solved exercises, board questions, and summaries."
+                                    }
+                                )
+                            )
+                        }
+                    } else {
+                        onSave(
+                            BookEntity(
+                                title = title.trim(),
+                                provinceCode = selectedProvince.lowercase().trim(),
+                                classLevel = selectedClass,
+                                subject = subject.trim(),
+                                bookType = bookType,
+                                fileLink = fileLink.trim(),
+                                coverImage = coverImage,
+                                fileSize = fileSize.ifBlank { "15.0 MB" },
+                                sampleContent = sampleContent.ifBlank {
+                                    "[CHAPTER 1: INTRODUCTION]\n$title\nCurriculum content for Class $selectedClass ($subject).\nIncludes complete solved exercises, board questions, and summaries."
+                                }
+                            )
                         )
-                    )
+                    }
                 },
                 shape = RoundedCornerShape(14.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Emerald600),
@@ -1067,12 +1237,75 @@ fun AdminEditBookDialog(
     var subject by remember { mutableStateOf(book.subject) }
     var fileLink by remember { mutableStateOf(book.fileLink) }
     var fileSize by remember { mutableStateOf(book.fileSize) }
+    var coverImage by remember { mutableStateOf(book.coverImage) }
+    var isExtractingCover by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("Edit Book Entry", fontWeight = FontWeight.Bold, color = Slate900) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                // Book Cover Preview & Extraction
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    BookCoverImage(
+                        coverImage = coverImage,
+                        title = title,
+                        subject = subject,
+                        bookType = BookType.fromString(book.bookType),
+                        modifier = Modifier
+                            .width(52.dp)
+                            .height(72.dp),
+                        cornerRadius = 8.dp,
+                        elevation = 2.dp
+                    )
+
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = if (coverImage.isNotBlank()) "Page 1 Cover Set" else "No cover",
+                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold, color = Slate700)
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        OutlinedButton(
+                            onClick = {
+                                if (fileLink.isNotBlank()) {
+                                    isExtractingCover = true
+                                    scope.launch {
+                                        val extracted = try {
+                                            com.example.data.util.PdfCoverExtractor.extractCoverFromPdf(
+                                                context = context,
+                                                rawUrl = fileLink,
+                                                fallbackTitle = title,
+                                                fallbackSubject = subject,
+                                                fallbackClass = book.classLevel,
+                                                fallbackProvince = book.provinceCode
+                                            )
+                                        } catch (e: Exception) {
+                                            ""
+                                        }
+                                        coverImage = extracted
+                                        isExtractingCover = false
+                                    }
+                                }
+                            },
+                            enabled = !isExtractingCover,
+                            shape = RoundedCornerShape(8.dp),
+                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp)
+                        ) {
+                            Text(
+                                text = if (isExtractingCover) "Extracting..." else "🔄 Re-extract Page 1",
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+                }
+
                 OutlinedTextField(
                     value = title,
                     onValueChange = { title = it },
@@ -1135,7 +1368,8 @@ fun AdminEditBookDialog(
                             title = title,
                             subject = subject,
                             fileLink = fileLink,
-                            fileSize = fileSize
+                            fileSize = fileSize,
+                            coverImage = coverImage
                         )
                     )
                 },

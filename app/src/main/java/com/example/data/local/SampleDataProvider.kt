@@ -6,6 +6,7 @@ object SampleDataProvider {
         val books = mutableListOf<BookEntity>()
         val provinces = listOf("kpk", "punjab", "sindh", "balochistan")
         val googleDriveLink = "https://drive.google.com/file/d/1Oo5pIMwXYg6KvfoGlumpxxBrCbpmK6Bl/view?usp=drive_link"
+        val driveCoverImage = "https://lh3.googleusercontent.com/d/1Oo5pIMwXYg6KvfoGlumpxxBrCbpmK6Bl=w800"
 
         // 1. Add General Reference Books (Grammar, Health Care, GK, Science, Computer, Urdu Qawaid)
         books.addAll(getGeneralBooks())
@@ -21,6 +22,7 @@ object SampleDataProvider {
                         subject = if (lvl == 1) "Primary Studies" else "General Knowledge & Subject Guide",
                         bookType = "TEXTBOOK",
                         fileLink = googleDriveLink,
+                        coverImage = driveCoverImage,
                         fileSize = "4.2 MB",
                         uploadDate = "2026-08",
                         downloadCount = 1050,
@@ -40,6 +42,7 @@ object SampleDataProvider {
 
     fun getGeneralBooks(): List<BookEntity> {
         val googleDriveLink = "https://drive.google.com/file/d/1Oo5pIMwXYg6KvfoGlumpxxBrCbpmK6Bl/view?usp=drive_link"
+        val driveCoverImage = "https://lh3.googleusercontent.com/d/1Oo5pIMwXYg6KvfoGlumpxxBrCbpmK6Bl=w800"
 
         return listOf(
             BookEntity(
@@ -49,6 +52,7 @@ object SampleDataProvider {
                 subject = "English Grammar",
                 bookType = "GUIDE",
                 fileLink = googleDriveLink,
+                coverImage = driveCoverImage,
                 fileSize = "5.8 MB",
                 uploadDate = "2026-08",
                 downloadCount = 2480,
@@ -140,6 +144,7 @@ object SampleDataProvider {
                 subject = "Health & First Aid",
                 bookType = "GUIDE",
                 fileLink = googleDriveLink,
+                coverImage = driveCoverImage,
                 fileSize = "4.9 MB",
                 uploadDate = "2026-08",
                 downloadCount = 1890,
@@ -205,6 +210,7 @@ object SampleDataProvider {
                 subject = "General Knowledge",
                 bookType = "GUIDE",
                 fileLink = googleDriveLink,
+                coverImage = driveCoverImage,
                 fileSize = "6.4 MB",
                 uploadDate = "2026-08",
                 downloadCount = 3120,
@@ -270,6 +276,7 @@ object SampleDataProvider {
                 subject = "Computer Skills",
                 bookType = "GUIDE",
                 fileLink = googleDriveLink,
+                coverImage = driveCoverImage,
                 fileSize = "5.2 MB",
                 uploadDate = "2026-08",
                 downloadCount = 1750,
@@ -325,6 +332,7 @@ object SampleDataProvider {
                 subject = "Urdu Grammar",
                 bookType = "GUIDE",
                 fileLink = googleDriveLink,
+                coverImage = driveCoverImage,
                 fileSize = "4.5 MB",
                 uploadDate = "2026-08",
                 downloadCount = 2190,
@@ -378,6 +386,7 @@ object SampleDataProvider {
                 subject = "Islamic & Ethics",
                 bookType = "GUIDE",
                 fileLink = googleDriveLink,
+                coverImage = driveCoverImage,
                 fileSize = "5.0 MB",
                 uploadDate = "2026-08",
                 downloadCount = 2050,
